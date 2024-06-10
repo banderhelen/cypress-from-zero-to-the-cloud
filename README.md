@@ -4,7 +4,7 @@
 
 It's great to have you here. I'm sure you will love this course. ❤️
 
-## What you will learn from the course
+## What you will learn from the course!
 
 - How to set up a Cypress project from scratch
 - How to visit local and remote pages
