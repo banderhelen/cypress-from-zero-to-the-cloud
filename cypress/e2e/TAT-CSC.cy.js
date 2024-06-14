@@ -56,4 +56,61 @@ describe("TAT Customer Service Center", () => {
   it('checks the type of service "Feedback"', () => {
     cy.get('#support-type > :nth-child(4) > input').check().should('be.checked');
   });
+  it('checks each type of service"', () => {
+    cy.get('#support-type')
+    .find('input[type="radio"]')
+    .each(typeOfService => {
+      cy.wrap(typeOfService)
+      .check()
+      .should('be.checked');
+    })
+  });
+  it('checks both checkboxes, then unchecks the last one', () => {
+    cy.get('input[type="checkbox"]')
+    .check()
+    .should('be.checked')
+    .last()
+    .uncheck()
+    .should('not.be.checked');
+  });
+  it('displays an error message when the phone becomes required but is not filled in before the form submission', () => {
+    cy.get('#phone-checkbox').check()
+    cy.contains("button","Send").click();
+    cy.get(".error").should("be.visible");
+  });
+  it('selects a file from the fixtures folder', () => {
+    cy.get('input[type="file"]')
+    .selectFile('cypress/fixtures/example.json')
+    .should(input => {
+      expect(input[0].files[0].name).to.eq('example.json');
+    });
+  });
+  it('selects a file simulating a drag-and-drop action', () => {
+    cy.get('input[type="file"]')
+    .selectFile('cypress/fixtures/example.json',{action: 'drag-drop'})
+    .should(input => {
+      expect(input[0].files[0].name).to.eq('example.json');
+    });
+  });
+  it('selects a file using a fixture to which an alias was given', () => {
+    cy.fixture('example.json').as('example')
+    cy.get('input[type="file"]')
+    .selectFile('@example')
+    .should(input => {
+      expect(input[0].files[0].name).to.eq('example.json');
+    });
+  });
+  it('verifies that the privacy policy page opens in another tab without the need for a click', () => {
+    cy.get('a')
+    .contains('Privacy Policy')
+    .should('have.attr', 'href', 'privacy.html')
+    .and('have.attr', 'target', '_blank');
+  });
+  it('access the privacy policy page by removing the target, then clicking on the link', () => {
+    cy.contains('a','Privacy Policy')
+    .invoke('removeAttr', 'target')
+    .click()
+    cy.contains('h1','TAT CSC - Privacy Policy').should('be.visible');
+    });
+    
 });
